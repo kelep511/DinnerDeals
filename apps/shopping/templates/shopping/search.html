@@ -1,0 +1,18 @@
+{% extends 'shopping/base.html' %}
+
+{%block content%}
+<div id="results">
+
+</div>
+{%endblock content%}
+
+{%block script%}
+$('form').submit(function(){
+  $.post($(this).attr('action'), $(this).serialize(), function(res) {
+    console.log('The Response object:');
+    conole.log(res);
+
+  }, 'json' );
+  return false;
+});
+{%endblock script%}

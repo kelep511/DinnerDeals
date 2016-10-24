@@ -18,5 +18,7 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    # url(r'^user/', include('apps.recipes.urls', namespace='user')),
+    url(r'^shop/', include('apps.shopping.urls', namespace='shop')),
     url(r'^', include('apps.login.urls', namespace='login')),
 ]
