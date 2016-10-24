@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang ='en'>
+  <head>
+    <meta charset="utf-8">
+    <title>Dinner Deals</title>
+  </head>
+  <body>
+  <form action="{% url 'login:create_user' %}">
+  {% csrf_token %}
+  <label>First Name: </label><input type="text" name="f_name" value="">
+  <label>Last Name: </label><input type="text" name="l_name" value="">
+  <label>User Name: </label><input type="text" name="u_name" value="">
+  <label>Email: </label><input type="text" name="email" value="">
+  <label>Password: </label><input type="text" name="password" value="">
+  <label>Confirm Password: </label><input type="text" name="repass" value="">
+  <input type="Submit" name="Submit" value="Submit">
+  </form>
+  </body>
+</html>
