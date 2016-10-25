@@ -1,18 +1,42 @@
 {% extends 'shopping/base.html' %}
 
 {%block content%}
-<div id="results">
+<form action="{% url 'shop:found' %}" method='post'>
 
+<div id="results">
+<div class="jumbotron">
+  <h1>Lets find a store!</h1>
+  <p>Please use the search function above to find the store nearest you.</p>
 </div>
+</div>
+</form>
 {%endblock content%}
 
 {%block script%}
-$('form').submit(function(){
-  $.post($(this).attr('action'), $(this).serialize(), function(res) {
-    console.log('The Response object:');
-    conole.log(res);
 
-  }, 'json' );
+$('form').submit(function() {
+  $.post($(this).attr('action'), $(this).serialize(), function(res){
+    console.log('the response object:');
+    console.log(res);
+    var htmlstr='';
+    console.log('Array?');
+    console.log(res.ArrayOfStore.Store)
+    res=res.ArrayOfStore.Store
+    console.log(res[0])
+    for( var i=0;i< res.length; i++){
+      htmlstr += '<div class="store"><ul>';
+      htmlstr += '<li><h3>Store Name: ' + res[i].Storename.$ + '</h3></li>';
+      htmlstr += '<li><p>City: '+ res[i].City.$ + '</p></li>';
+      htmlstr += '<li><p>State: '+ res[i].State.$ + '</p></li>';
+      htmlstr += '<li><p>Zip Code: '+ res[i].Zip.$ + '</p></li>';
+      htmlstr += '<li><input type="radio" value='+ res[i].StoreId.$ + ' name="storeid"> Select this store</li>';
+      htmlstr += '</ul></div><input type="submit" value="Use this">';
+    }
+    console.log(htmlstr)
+    $('#results').html(htmlstr);
+  }, 'json');
   return false;
 });
+
+
 {%endblock script%}
