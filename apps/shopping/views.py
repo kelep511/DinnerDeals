@@ -29,4 +29,4 @@ def zipsearch(request):
     return HttpResponse(stores)
 
 def store(request):
-    pass
+    request.session['s_id']=request.POST['storeId']

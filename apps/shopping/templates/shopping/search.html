@@ -30,8 +30,9 @@ $('form').submit(function() {
       htmlstr += '<li><p>State: '+ res[i].State.$ + '</p></li>';
       htmlstr += '<li><p>Zip Code: '+ res[i].Zip.$ + '</p></li>';
       htmlstr += '<li><input type="radio" value='+ res[i].StoreId.$ + ' name="storeid"> Select this store</li>';
-      htmlstr += '</ul></div><input type="submit" value="Use this">';
+      htmlstr += '</ul></div>';
     }
+    htmlstr += '<input type="submit" value="Use this">';
     console.log(htmlstr)
     $('#results').html(htmlstr);
   }, 'json');
