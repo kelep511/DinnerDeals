@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 from django.db import models
 import re
+import bcrypt
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 
 class UserManager(models.Manager):
@@ -9,6 +10,16 @@ class UserManager(models.Manager):
 
     def reg_validate(self,data):
         errors=[]
+        users=self.all()
+        for user in users:
+            if data['email'].title()==user.email:
+                errors.append('Email address taken')
+                break
+        for user in users:
+            if data['u_name'].title()==user.u_name:
+                errors.append('Username already taken')
+                break
+
         self.f_name_check(data['f_name'],errors)
         self.l_name_check(data['l_name'],errors)
         self.email_check(data['email'],errors)
@@ -45,13 +56,17 @@ class UserManager(models.Manager):
         if len(password)<6:
             errors.append('Password not long enough. Password must be at least 6 characters')
             return self
+    def create_user(self,data):
+        hashed_pw=bcrypt.hashpw(data['password'].encode(), bcrypt.gensalt())
+        zip_code=data['zip'].zfill(5)
+        self.create(f_name=data['f_name'].title(), l_name=data['l_name'].title(),u_name=data['u_name'].title(), email=data['email'].title(), password=hashed_pw, z_code=zip_code)
 class User(models.Model):
     f_name=models.CharField(max_length=40)
     l_name=models.CharField(max_length=40)
     u_name=models.CharField(max_length=30)
     email=models.EmailField(max_length=200)
     password=models.CharField(max_length=255)
-    zip_code=models.CharField(max_length=5)
+    z_code=models.CharField(max_length=5)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
     objects=UserManager()

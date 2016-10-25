@@ -44,7 +44,7 @@
         <div class="blocks">
         {%if messages%}
         {%for message in messages%}
-        <li class="alert alert-danger" role="alert">{{message}}</li>
+        <li class="alert alert-{{message.tags}}" role="alert">{{message}}</li>
         {%endfor%}
         {%endif%}
         {%block content%}<h1>Dinner Deals</h1>{%endblock%}
