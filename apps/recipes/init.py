@@ -1,4 +1,4 @@
-from models import IngredientManger, Ingredients
+from .models import IngredientManager, Ingredients
 
 data=[]
 data.append(['Organic Baby Carrots',75640])

@@ -20,5 +20,6 @@ def new(request):
 def create(request):
     ingdata=[]
     # Push data to ingdata from request.post object. Determine total number of ingredients then iterate through with for loop to push all of them.
-    Recipe.objects.newRecipe(request.POST['title'], ingdata)
-    
+    recipe=Recipe.objects.newRecipe(request.POST['title'], request.POST['desc'],ingdatas)
+    messages.success(request, recipe.title+' added successfully.')
+    return True

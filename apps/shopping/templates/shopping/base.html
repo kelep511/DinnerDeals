@@ -15,7 +15,7 @@
                   <p class="navbar-text">Home</p>
               </a>
               <div class="login_form col-md-offset-7">
-                  <form class="navbar-form navbar-left" action='./zipsearch' method='post' role="search">
+                  <form class="navbar-form navbar-left" action='./zipsearch' method='post' id='zipfind' role="search">
                       {%csrf_token%}
                       <div class="form-group">
                           <input type="text" name='zip' class="form-control" placeholder="Zip Code" value={{request.session.zip}}>

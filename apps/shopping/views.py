@@ -8,6 +8,13 @@ import requests
 import re
 # Create your views here.
 
+def idCheck(request):
+    if 'id' not in request.session:
+        messages.add_message(request, messages.ERROR, 'Please login to continue.')
+        return False
+    else:
+        return True
+
 def search(request):
     if 'data' not in request.session:
         return render(request, 'shopping/search.html')
@@ -16,6 +23,8 @@ def search(request):
     }
     return render(request, 'shopping/search.html', context)
 
+def multi(request):
+    pass
 
 def zipsearch(request):
     request.session['data']=''
@@ -29,4 +38,10 @@ def zipsearch(request):
     return HttpResponse(stores)
 
 def store(request):
-    request.session['s_id']=request.POST['storeId']
+    if not request.POST:
+        return redirect(reverse('shop:search'))
+
+    context={
+    'storeid':request.POST['storeid'],
+    }
+    return render(request, 'shopping/singleshop.html', context)

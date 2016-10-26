@@ -1,0 +1,18 @@
+{% extends 'shopping/base.html' %}
+
+{%block content%}
+<div class="row">
+<ul>
+  <li><select class='.col-md4' name="recipes" id='recipes'>
+    {% for items in recipes %}
+    <option value="{{items.id}}">{{items.title}}</option>
+    {% endfor %}
+  </select></li>
+  <li><a class='.col-md3' href="{% url 'shop:multi' %}"></a></li>
+  <li></li>
+</ul>
+</div>
+{%endblock content%}
+
+{%block script%}
+{%endblock script%}
