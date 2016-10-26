@@ -1,0 +1,103 @@
+{% extends 'recipes/base.html'%}
+{%block recipe%}
+<li class='active'><a href="{% url 'recipes:add_recipe' %}">Add Recipe</a></li>
+{%endblock%}
+{%block content%}
+<p> Lets make a recipe!.</p>
+<form class="form-horizontal" id='add_recipe' style='padding-top: 30px;' method="POST" action="{% url 'recipes:create_recipe' %}"/>
+  {%csrf_token%}
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Recipe Name</label>
+    <div class="col-sm-3">
+      <input type="text" class="form-control" name='title' placeholder='Recipe Name'>
+    </div>
+  </div>
+ <div id='items'>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Ingredient</label>
+    <div class="col-sm-2">
+      <input type="text" class="form-control" name='item' placeholder='Recipe Name'>
+    </div>
+    <label class="col-md-1 control-label">Unit</label>
+    <div class="col-md-1">
+      <select class="form-control" name="unit" id="units">
+        <option value="none">none</option>
+        <option value="tsp">tsp</option>
+        <option value="Tbsp">Tbsp</option>
+        <option value="Cup(s)">Cup(s)</option>
+        <option value="oz">oz</option>
+        <option value="lb(s)">lb(s)</option>
+      </select>
+    </div>
+      <label class="col-md-1 control-label">Quantitiy</label>
+      <div class="col-md-2">
+        <select id="quantity" class="form-control" name="qty" >
+          <option value ="" >--select one--</option>
+        </select>
+      </div>
+    <button type='button' id='add'>Add Ingredient</button>
+</div>
+</div>
+
+  <div class="checkbox col-sm-offset-6 ">
+  <label>
+    <input type="checkbox" name='private' value="True">
+  Private ( Others wont be able to see this recipe )
+  </label>
+</div>
+<div class="checkbox col-sm-offset-6 ">
+  <label>
+    <input type="checkbox" value="favorite" >
+    Favorite
+  </label>
+</div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button id='add_new_recipe'type="submit" class="btn btn-default">Add Recipe</button>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class=" col-sm-offset-4 col-sm-2 control-label">Directions:</label>
+      <div class="col-sm-4">
+        <textarea class="form-control" form='add_recipe' name='desc'rows="5"></textarea>
+      </div>
+</div>
+</form>
+{%endblock%}
+{% block js%}
+<script>
+function select_qty(){
+  $("#units").change(function () {
+      var val = $(this).val();
+      if (val == "none") {
+          $("#quantity").html("<option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option><option value='9'>9</option><option value='10'>10</option>");
+      } else if (val == "tsp") {
+          $("#quantity").html( "<option value='.125'>1/8</option><option value='.25'>1/4</option><option value='.5'>1/2</option><option value='.75'>3/4</option><option value='1'>1</option><option value='1.125'>1-1/8</option><option value='1.25'>1-1/4</option><option value='1.5'>1-1/2</option><option value='1.75'>1-3/4</option><option value='2'>2</option><option value='2.25'>2-1/4</option><option value='2.5'>2-1/2</option><option value='2.75'>2-3/4</option><option value='3'>3</option>");
+      } else if (val == "Tbsp") {
+          $("#quantity").html( "<option value='.5'>1/2</option><option value='1'>1</option><option value='1.5'>1-1/2</option><option value='2'>2</option><option value='2.5'>2-1/2</option><option value='3'>3</option><option value='3.5'>3-1/2</option><option value='4'>4</option>");
+      } else if (val == "Cup(s)") {
+          $("#quantity").html( "<option value='.25'>1/4</option><option value='.33'>1/3</option><option value='.5'>1/2</option><option value='.67'>2/3</option><option value='.75'>3/4</option><option value='1'>1</option><option value='1.25'>1-1/4</option><option value='1.33'>1-1/3</option><option value='1.5'>1-1/2</option><option value='1.67'>1-2/3</option><option value='1.75'>1-3/4</option><option value='2'>2</option><option value='2.25'>2-1/4</option><option value='2.33'>2-1/3</option><option value='2.5'>2-1/2</option><option value='2.67'>2-2/3</option><option value='2.75'>2-3/4</option><option value='3'>3</option><option value='3.25'>3-1/4</option><option value='3.33'>3-1/3</option><option value='3.5'>3-1/2</option><option value='3.67'>3-2/3</option><option value='3.75'>3-3/4</option><option value='4'>4</option><option value='4.25'>4-1/4</option><option value='4.5'>4-1/2</option><option value='4.67'>4-2/3</option><option value='4.75'>4-3/4</option><option value='5'>5</option><option value='5.5'>5-1/2</option><option value='6'>6</option><option value='6.5'>6-1/2</option><option value='7'>7</option><option value='7.5'>8-1/2</option><option value='8'>8</option><option value='8.5'>8-1/2</option><option value='9'>9</option><option value='9.5'>9-1/2</option><option value='10'>10</option>");
+      } else if (val == "oz") {
+          $("#quantity").html( "<option value='.25'>1/4</option>><option value='.5'>1/2</option><option value='.75'>3/4</option><option value='1'>1</option><option value='1.25'>1-1/4</option><option value='1.5'>1-1/2</option><option value='1.75'>1-3/4</option><option value='2'>2</option><option value='2.25'>2-1/4</option><option value='2.5'>2-1/2</option><option value='2.75'>2-3/4</option><option value='3'>3</option><option value='3.25'>3-1/4</option><option value='3.5'>3-1/2</option><option value='3.75'>3-3/4</option><option value='4'>4</option><option value='4.25'>4-1/4</option><option value='4.5'>4-1/2</option><option value='4.75'>4-3/4</option><option value='5'>5</option><option value='5.5'>5-1/2</option><option value='6'>6</option><option value='6.5'>6-1/2</option><option value='7'>7</option><option value='7.5'>8-1/2</option><option value='8'>8</option><option value='8.5'>8-1/2</option><option value='9'>9</option><option value='9.5'>9-1/2</option><option value='10'>10</option><option value='10.5'>10-1/2</option><option value='11'>11</option><option value='11.5'>11-1/2</option><option value='12'>12</option><option value='12.5'>12-1/2</option><option value='13'>13</option><option value='13.5'>13-1/2</option><option value='14'>14</option><option value='14.5'>14-1/2</option><option value='15'>15</option><option value='15.5'>15-1/2</option><option value='16'>16</option>");
+      } else if (val == "lb(s)") {
+          $("#quantity").html("<option value='.25'>1/4</option>><option value='.5'>1/2</option><option value='.75'>3/4</option><option value='1'>1</option><option value='1.25'>1-1/4</option><option value='1.5'>1-1/2</option><option value='1.75'>1-3/4</option><option value='2'>2</option><option value='2.25'>2-1/4</option><option value='2.5'>2-1/2</option><option value='2.75'>2-3/4</option><option value='3'>3</option><option value='3.25'>3-1/4</option><option value='3.5'>3-1/2</option><option value='3.75'>3-3/4</option><option value='4'>4</option><option value='4.25'>4-1/4</option><option value='4.5'>4-1/2</option><option value='4.75'>4-3/4</option><option value='5'>5</option><option value='5.5'>5-1/2</option><option value='6'>6</option><option value='6.5'>6-1/2</option><option value='7'>7</option><option value='7.5'>8-1/2</option><option value='8'>8</option><option value='8.5'>8-1/2</option><option value='9'>9</option><option value='9.5'>9-1/2</option><option value='10'>10</option><option value='10.5'>10-1/2</option><option value='11'>11</option><option value='11.5'>11-1/2</option><option value='12'>12</option><option value='12.5'>12-1/2</option><option value='13'>13</option><option value='13.5'>13-1/2</option><option value='14'>14</option><option value='14.5'>14-1/2</option><option value='15'>15</option><option value='15.5'>15-1/2</option><option value='16'>16</option>");
+      }
+
+  });
+
+}
+  $(document).ready(function(){
+    select_qty();
+    $('#add').click(function(e){
+      $('#items').append('<div class="form-group"><label class="col-sm-2 control-label">Ingredient</label><div class="col-sm-2"><input type="text" class="form-control" name="item" placeholder="Recipe Name"></div><label class="col-md-1 control-label">Unit</label><div class="col-md-1"><select class="form-control" name="unit" id="units"><option value="none">none</option><option value="tsp">tsp</option><option value="Tbsp">Tbsp</option><option value="Cup(s)">Cup(s)</option><option value="oz">oz</option><option value="lb(s)">lb(s)</option></select></div><label class="col-md-1 control-label">Quantitiy</label><div class="col-md-2"><select id="quantity" class="form-control" name="qty" ><option value ="" >--select one--</option></select></div><button class="delete">Delete</button></div>');
+        select_qty();
+     });
+    $("body").on("click", ".delete", function (e) {
+ 	    $(this).parent("div").remove();
+     });
+  });
+
+
+
+</script>
+{%endblock%}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang ='en'>
+  <head>
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+
+
+    <title>Dinner Deals</title>
+  </head>
+  <body style='padding-top: 70px;' }>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" >
+  <div class="container"><!-- Nav tabs -->
+<ul class="nav navbar-nav">
+  {%block home%}<li><a href="{% url 'recipes:splash' %}">Home</a></li>{%endblock%}
+  {%block shop%}<li><a href="#" >Go Shopping</a></li>{%endblock%}
+  {%block recipe%}<li><a href="{% url 'recipes:add_recipe'%}">My Recipes</a></li>{%endblock%}
+  {%block account%}<li><a href="{% url 'recipes:myaccount' %}" >My Account</a></li>{%endblock%}
+
+  <li><a class='.navbar-right'href="{% url 'login:logout'%}" >Logout</a></li>
+
+</ul>
+
+  </div>
+</nav>
+  <p class="navbar-text"> </p>
+    {%if messages%}
+    {%for message in messages%}
+    <li class="alert alert-{{message.tags}}" role="alert">{{message}}</li>
+    {%endfor%}
+    {%endif%}
+  {%block content%}{%endblock%}
+  {%block js%}{%endblock%}
+  </body>
+</html>
