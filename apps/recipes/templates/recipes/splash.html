@@ -1,0 +1,7 @@
+{% extends 'recipes/base.html'%}
+{%block content%}
+<p> Welcome {{request.session.user.u_name}}.</p>
+{%endblock%}
+{%block home%}
+<li class='active'><a href="{% url 'recipes:splash' %}">Home</a></li>
+{%endblock%}

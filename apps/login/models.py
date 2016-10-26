@@ -2,11 +2,27 @@ from __future__ import unicode_literals
 from django.db import models
 import re
 import bcrypt
+from django.core.exceptions import ObjectDoesNotExist
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 
 class UserManager(models.Manager):
-    def user_validate(self, data):
+    def user_validate(self,data):
         errors=[]
+        self.user_check(data['u_name'],errors)
+        self.pass_val(data['password'],errors)
+        if errors:
+            return errors
+        try:
+            user= self.get(u_name=data['u_name'].title())
+            print user.u_name
+            if bcrypt.hashpw(data['password'].encode(),user.password.encode())==user.password.encode():
+                return (False,user)
+            else:
+                errors.append('User name and/or password is incorrect')
+                return errors
+        except ObjectDoesNotExist:
+            errors.append('User name and/or password is incorrect')
+            return errors
 
     def reg_validate(self,data):
         errors=[]
@@ -28,6 +44,40 @@ class UserManager(models.Manager):
         self.pass_check(data['password'], data['repass'],errors)
         self.pass_val(data['password'],errors)
         return errors
+    def edit_user(self,data):
+        errors=[]
+        changes={
+
+        }
+
+        if data['f_name']:
+            self.f_name_check(data['f_name'],errors)
+            changes['f_name']=data['f_name'].title()
+        if data['l_name']:
+            self.l_name_check(data['l_name'],errors)
+            changes['l_name']=data['l_name'].title()
+        if data['email']:
+            self.email_check(data['email'],errors)
+            users=self.all()
+            for user in users:
+                if data['email'].title()==user.email:
+                    errors.append('Email address taken')
+                    break
+            changes['email']=data['email'].title()
+        if data['zip']:
+            self.zip_check(data['zip'],errors)
+            zip_code=data['zip'].zfill(5)
+            changes['z_code']=data['zip']
+
+        if data['password']:
+            self.pass_val(data['password'],errors)
+            self.pass_check(data['password'], data['repass'],errors)
+            hashed_pw=bcrypt.hashpw(data['password'].encode(), bcrypt.gensalt())
+            changes['password']=hashed_pw
+        return errors, changes
+
+
+
     def f_name_check(self,f_name, errors):
             if len(f_name)<2:
                 errors.append('First name too short. Enter a valid name.')
