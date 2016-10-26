@@ -26,6 +26,11 @@ def search(request):
 def multi(request):
     pass
 
+def displaysingle(request):
+    r_id=request.POST['select']
+    recipe=Recipes.objects.get(id=r_id)
+    return HttpResponse(recipe)
+
 def zipsearch(request):
     request.session['data']=''
     request.session['zip']=request.POST['zip']
