@@ -8,24 +8,23 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <title>{%block title%}{%endblock%}</title>
 </head>
-  <body style='padding-top:100px;'>
-      <nav class="navbar navbar-default navbar-fixed-top">
-          <div class="container">
-              <a href="">
-                  <p class="navbar-text">Home</p>
-              </a>
-              <div class="login_form col-md-offset-7">
-                  <form class="navbar-form navbar-left" action='./zipsearch' method='post' id='zipfind' role="search">
-                      {%csrf_token%}
-                      <div class="form-group">
-                          <input type="text" name='zip' class="form-control" placeholder="Zip Code" value={{request.session.zip}}>
+<body style='padding: 70px;' }>
+<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" >
+<div class="container"><!-- Nav tabs -->
+<ul class="nav navbar-nav">
+{%block home%}<li><a href="{% url 'recipes:splash' %}">Home</a></li>{%endblock%}
+{%block shop%}<li><a href="{% url 'shop:search'%}" >Go Shopping</a></li>{%endblock%}
+{%block recipe%}<li><a href="{% url 'recipes:add_recipe'%}">My Recipes</a></li>{%endblock%}
+{%block account%}<li><a href="{% url 'recipes:myaccount' %}" >My Account</a></li>{%endblock%}
 
-                      </div>
-                      <button type="submit" class="btn btn-default">Submit</button>
-                      <p>95050 is working</p>
-                  </form>
+<li><a class='.navbar-right'href="{% url 'login:logout'%}" >Logout</a></li>
+
+</ul>
+{% block zip%}
+
+                  {% endblock %}
               </div>
-            </div>
+
           </nav>
 
         {%block content%}{%endblock%}

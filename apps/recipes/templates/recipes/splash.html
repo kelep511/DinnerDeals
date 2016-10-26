@@ -1,6 +1,12 @@
 {% extends 'recipes/base.html'%}
 {%block content%}
 <p> Welcome {{request.session.user.u_name}}.</p>
+{% if request.session.user.id == 1 and not request.inital %}
+<p>Please initialize the database by <a href="{% url 'recipes:first' %}"> Clicking here</a></p>
+{% endif %}
+
+<!-- Container with tabs that should list the user's three chosen recipes. Or, if nothing is chosen, a prompt to visit their My Account page to set them -->
+
 {%endblock%}
 {%block home%}
 <li class='active'><a href="{% url 'recipes:splash' %}">Home</a></li>

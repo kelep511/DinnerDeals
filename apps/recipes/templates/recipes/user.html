@@ -1,0 +1,11 @@
+{% extends 'recipes/base.html'%}
+
+{%block recipe%}
+<li class='active'><a href="{% url 'recipes:add_recipe'%}">My Recipes</a></li>
+{%endblock%}
+
+{%block content%}
+<h2>{{user.name}}'s Recipes!</h2>
+
+
+{%endblock%}

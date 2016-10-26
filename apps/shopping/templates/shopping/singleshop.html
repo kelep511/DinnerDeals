@@ -2,15 +2,18 @@
 
 {%block content%}
 <div class="row">
-<ul style='liststyle:none; display:inline;'>
-  <li><select class='.col-md4' name="recipes" id='recipes'>
+  <form action="./displayrecipe" name='display' method='post' id='recipes'>
+    {%csrf_token%}
+<ul style='list-style:none;'>
+  <li style='display:inline;'><select class='.col-md6'  name="recipes" >
+    <option value="" disable selected disable='disable'>--Select One--</option>
     {% for items in recipes %}
-    <option name='select' value="{{items.id}}">{{items.title}}</option>
+    <option value="{{items.id}}">{{items.title}}</option>
     {% endfor %}
   </select></li>
-  <li><a class='.col-md3' href="{% url 'shop:multi' %}">Shopping for more than one recipe? Click here!</a></li>
-  <li></li>
+  <li style=' display:inline;'><a class='.col-md3' href="{% url 'shop:multi' %}">Shopping for more than one recipe? Click here!</a></li>
 </ul>
+</form>
 </div>
 <div class="row">
   <div id="results">
@@ -21,9 +24,7 @@
 
 {%block script%}
 $('#recipes').on('change', function(){
-  val=$(this).val;
-  route='./displayrecipe';
-  $.post(route,val, function(res){
+  $.post($(this).attr('action'),$(this).serialize(), function(res){
     var htmlstr='';
     console.log('results:');
     console.log(res);
@@ -34,6 +35,7 @@ $('#recipes').on('change', function(){
     htmlstr +='</ul></div>';
     $('#results').html(htmlstr);
   }, 'object');
+  return false;
 });
 function completeAlert(){
   alert("<div class='fade in'>Youve picked everything up! Choose a new recipe if you'd like to continue.</div>");

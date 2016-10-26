@@ -42,7 +42,7 @@ def create_user(request):
     'id':user.id,
     'u_name':user.u_name
     }
-    return redirect('login:recipes')
+    return redirect('recipes:splash')
 def edit_user(request):
     changes=User.objects.edit_user(request.POST)
     if changes[0]:

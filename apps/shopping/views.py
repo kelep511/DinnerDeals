@@ -3,36 +3,39 @@ from django.http import HttpResponse
 from xml.dom.minidom import parse, parseString
 from xmljson import badgerfish as bf
 from xml.etree.ElementTree import fromstring
+from ..login.models import User
+from ..recipes.models import Recipes, Ingredients
 from json import dumps
 import requests
 import re
 # Create your views here.
 
 def idCheck(request):
-    if 'id' not in request.session:
+    if 'user' not in request.session:
         messages.add_message(request, messages.ERROR, 'Please login to continue.')
         return False
     else:
         return True
 
 def search(request):
-    if 'data' not in request.session:
-        return render(request, 'shopping/search.html')
-    context={
-    'data':request.session['data'],
-    }
-    return render(request, 'shopping/search.html', context)
+    idCheck(request)
+    if 'zip' not in request.session:
+        user=User.objects.get(id=request.session['user']['id'])
+        request.session['zip']=user.z_code
+    return render(request, 'shopping/search.html')
 
 def multi(request):
     pass
 
 def displaysingle(request):
-    r_id=request.POST['select']
+    r_id=request.POST['recipes']
+    print r_id
     recipe=Recipes.objects.get(id=r_id)
+    print recipe.ingredients
+
     return HttpResponse(recipe)
 
 def zipsearch(request):
-    request.session['data']=''
     request.session['zip']=request.POST['zip']
     zipp=request.POST['zip']
     stores={}
@@ -43,10 +46,13 @@ def zipsearch(request):
     return HttpResponse(stores)
 
 def store(request):
-    if not request.POST:
+    idCheck(request)
+    if not request.POST and 'storeid' not in request.session:
         return redirect(reverse('shop:search'))
-
+    if 'storeid' not in request.session:
+        request.session['storeid']=request.POST['storeid']
     context={
-    'storeid':request.POST['storeid'],
+    'storeid':request.session['storeid'],
+    'recipes':Recipes.objects.filter(author=User.objects.get(id=request.session['user']['id'])),
     }
     return render(request, 'shopping/singleshop.html', context)

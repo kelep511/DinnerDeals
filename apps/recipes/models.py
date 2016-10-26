@@ -12,7 +12,7 @@ class IngredientManager(models.Manager):
 # In order to add ingredients to recipe, must pass an array of product ids
 class RecipeManager(models.Manager):
     def newRecipe(self,t_name,u_id,desc, data):
-        recipe=Recipes.objects.create(title=t_name,author=User.objects.get(id=u_id),)
+        recipe=Recipes.objects.create(title=str(t_name),author=User.objects.get(id=u_id), desc=desc)
         for item in data:
             ing=Ingredients.objects.get(itemid=item)
             recipe.ingredients.add(ing)
