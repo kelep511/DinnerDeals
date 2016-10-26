@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from ..login.models import User
 
 # Create your views here.
@@ -11,3 +11,8 @@ def myaccount(request):
     return render (request, 'recipes/myaccount.html', context)
 def add_recipe(request):
     return render (request, 'recipes/add_recipe.html')
+def create_recipe(request):
+    print'*'*50
+    print request.POST
+    print'*'*50
+    return redirect('recipes:add_recipe')
