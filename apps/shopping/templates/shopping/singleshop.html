@@ -11,7 +11,7 @@
     <option value="{{items.id}}">{{items.title}}</option>
     {% endfor %}
   </select></li>
-  <li style=' display:inline;'><a class='.col-md3' href="{% url 'shop:multi' %}">Shopping for more than one recipe? Click here!</a></li>
+  <li style=' display:inline;'><a class='.col-md3' id='multi' href="{% url 'shop:multi' %}">Shopping for more than one recipe? Click here!</a></li>
 </ul>
 </form>
 </div>
@@ -43,6 +43,10 @@ $('#recipes').on('change', function(){
   });
     return false;
   });
+
+$('#mutli').on('click', function(){
+  alert("<div class="fade in">Unfortuntely, this has yet to be implimented just yet. Check back, maybe!</div>")
+});
 
 function completeAlert(){
   alert("<div class='fade in'>Youve picked everything up! Choose a new recipe if you'd like to continue.</div>");

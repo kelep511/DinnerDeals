@@ -20,11 +20,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='recipes',
-            name='favorites',
-            field=models.ManyToManyField(related_name='favs', to='login.User'),
-        ),
-        migrations.AddField(
-            model_name='recipes',
             name='isprivate',
             field=models.BooleanField(default=False),
         ),
