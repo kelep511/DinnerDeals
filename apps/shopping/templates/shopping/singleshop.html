@@ -5,8 +5,8 @@
   <form action="./displayrecipe" name='display' method='post' id='recipes'>
     {%csrf_token%}
 <ul style='list-style:none;'>
-  <li style='display:inline;'><select class='.col-md6'  name="recipes" >
-    <option value="" disable selected disable='disable'>--Select One--</option>
+  <li style='display:inline;'><select class='.col-md6'  name="recipes" id='recipeselect' >
+    <option value="" disable selected disabled="disable">--Select One--</option>
     {% for items in recipes %}
     <option value="{{items.id}}">{{items.title}}</option>
     {% endfor %}
@@ -24,19 +24,31 @@
 
 {%block script%}
 $('#recipes').on('change', function(){
-  $.post($(this).attr('action'),$(this).serialize(), function(res){
-    var htmlstr='';
-    console.log('results:');
-    console.log(res);
-    htmlstr +='<div class="recipe col-md-6"><ul style="liststyle:none;"><li>'+res.title+'</li><li><div class="input-group"><span class="input-group-addon">';
-    for (items in res.ingredients.all){
-      htmlstr +='<input type="checkbox" name="ingredients" value="'+items.itemid+'"></span>'+items.name+'</div></li>';
+  console.log('clicked recipe');
+  $.ajax({
+    url: $(this).attr('action'),
+    method: 'POST',
+    data: $(this).serialize(),
+    success: function(res){
+      var htmlstr='';
+      console.log('results:');
+      console.log(res.ingred);
+      htmlstr +='<div class="recipe col-md-6"><ul style="liststyle:none;"><li>'+res.title+'</li><li><div class="input-group"><span class="input-group-addon">';
+      for (items in res){
+        htmlstr +='<input type="checkbox" name="ingredients" value="'+items.itemid+'"></span>'+items.name+'</div></li>';
+      };
+      htmlstr +='</ul></div>';
+      $('#results').html(htmlstr);
     }
-    htmlstr +='</ul></div>';
-    $('#results').html(htmlstr);
-  }, 'object');
-  return false;
-});
+  });
+
+    return false;
+  });
+
+
+
+
+
 function completeAlert(){
   alert("<div class='fade in'>Youve picked everything up! Choose a new recipe if you'd like to continue.</div>");
   return True;

@@ -16,6 +16,21 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
+from apps.login.models import User
+from apps.recipes.models import Recipes, Ingredients
+
+class UAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(User, UAdmin)
+
+class RecipeAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Recipes, RecipeAdmin)
+
+class IngredientAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Ingredients, IngredientAdmin)
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     # url(r'^user/', include('apps.recipes.urls', namespace='user')),
