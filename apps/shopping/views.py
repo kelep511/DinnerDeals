@@ -30,10 +30,12 @@ def multi(request):
 def displaysingle(request):
     r_id=request.POST['recipes']
     print r_id
-    recipe=Recipes.objects.get(id=r_id)
-    print recipe.ingredients
-
-    return HttpResponse(recipe)
+    ingred=Ingredients.objects.filter(recipe_ing=Recipes.objects.get(id=r_id))
+    context={
+        'r_id':r_id,
+        'ingred':ingred,
+    }
+    return HttpResponse(context)
 
 def zipsearch(request):
     request.session['zip']=request.POST['zip']

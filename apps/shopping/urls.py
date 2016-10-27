@@ -9,4 +9,4 @@ urlpatterns=[
     url(r'^displayrecipe$', views.displaysingle, name='single'),
 
 
-]
+] 

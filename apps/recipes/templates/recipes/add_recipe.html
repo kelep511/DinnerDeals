@@ -1,9 +1,9 @@
 {% extends 'recipes/base.html'%}
 {%block recipe%}
-<li class='active'><a href="{% url 'recipes:add_recipe' %}">Add Recipe</a></li>
+<li class='active'><a href="{% url 'recipes:add_recipe' %}">Add a Recipe</a></li>
 {%endblock%}
 {%block content%}
-<p> Lets make a recipe!.</p>
+<p> Lets make a recipe!</p>
 <form class="form-horizontal" id='add_recipe' style='padding-top: 30px;' method="POST" action="{% url 'recipes:create_recipe' %}"/>
   {%csrf_token%}
   <div class="form-group">
@@ -16,7 +16,12 @@
   <div class="form-group">
     <label class="col-sm-2 control-label">Ingredient</label>
     <div class="col-sm-2">
-      <input type="text" class="form-control" name='item' row='1'  placeholder='Recipe Name'>
+      <select class="form-control" name="item1">
+      <option value="" disable selected disabled="disable" >--select one--</option>
+      {% for items in ingredients %}
+      <option value="{{items.itemid}}">{{items.name}}</option>
+      {% endfor %}
+    </select>
     </div>
     <label class="col-md-1 control-label">Unit</label>
     <div class="col-md-2">
@@ -42,7 +47,7 @@
 
   <div class="checkbox col-sm-offset-6 ">
   <label>
-    <input type="checkbox" name='private' value="True">
+    <input type="checkbox" name='private'>
   Private ( Others wont be able to see this recipe )
   </label>
 </div>
@@ -54,7 +59,17 @@
   <div class="form-group">
     <label class=" col-sm-offset-4 col-sm-2 control-label">Directions:</label>
       <div class="col-sm-4">
+        <textarea class="form-control" form='add_recipe' name='dire'rows="5"></textarea>
+      </div>
+      <br>
+      <div class="row">
+
+  <div class="form-group">
+    <label class=" col-sm-offset-4 col-sm-2 control-label">Please enter a short description:</label>
+      <div class="col-sm-4">
         <textarea class="form-control" form='add_recipe' name='desc'rows="5"></textarea>
+      </div>
+      <div id="hide"><input type="hidden" value="1" name="hidden"></div>
       </div>
 </div>
 </form>
@@ -87,13 +102,16 @@ function select_qty(){
     var rowNum=1;
     $('#add').click(function(e){
       rowNum ++;
-
-      row='<div class="form-group"><label class="col-sm-2 control-label">Ingredient</label><div class="col-sm-2 "><input type="text" class="form-control" name="item" row="'+rowNum+'" placeholder="Recipe Name"></div><label class="col-md-1 control-label">Unit</label><div class="col-md-2"><select class="form-control units" row="'+rowNum+'" name="unit"><option value="" disable selected disabled="disable" >--select one--</option><option value="none">none</option><option value="tsp">tsp</option><option value="Tbsp">Tbsp</option><option value="Cup(s)">Cup(s)</option><option value="oz">oz</option><option value="lb(s)">lb(s)</option></select></div><label class="col-md-1 control-label">Quantitiy</label><div class="col-md-2"><select class="form-control quantity" name="qty" row="'+rowNum+'" ><option value ="" >--select one--</option></select></div><button class="delete">Delete</button></div>'
+      num='<input type="hidden" value="'+rowNum+'" name="hidden">'
+      row='<div class="form-group"><label class="col-sm-2 control-label">Ingredient</label><div class="col-sm-2"><select class="form-control" name="item'+rowNum+'"  placeholder="Recipe Name"><option value="" disable selected disabled="disable" >--select one--</option>{% for items in ingredients %}<option value="{{items.itemid}}">{{items.name}}</option>{% endfor %}</select></div><label class="col-md-1 control-label">Unit</label><div class="col-md-2"><select class="form-control units" row="'+rowNum+'" name="unit"><option value="" disable selected disabled="disable" >--select one--</option><option value="none">none</option><option value="tsp">tsp</option><option value="Tbsp">Tbsp</option><option value="Cup(s)">Cup(s)</option><option value="oz">oz</option><option value="lb(s)">lb(s)</option></select></div><label class="col-md-1 control-label">Quantitiy</label><div class="col-md-2"><select class="form-control quantity" name="qty" row="'+rowNum+'" ><option value ="" >--select one--</option></select></div><button class="delete">Delete</button></div>'
       $('#items').append(row);
+      $('#hide').html(num)
         select_qty();
      });
+
     $("body").on("click", ".delete", function (e) {
  	    $(this).parent("div").remove();
+      rowNum --;
      });
 
   });
