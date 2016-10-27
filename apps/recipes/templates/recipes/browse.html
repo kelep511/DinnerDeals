@@ -1,0 +1,75 @@
+{% extends 'recipes/base.html'%} {%block browse%}
+<li class='active'><a href="{% url 'recipes:userrecipes' u_id=request.session.user.id %}">My Recipes</a></li>
+{%endblock%}
+ {%block content%}
+ <h2>Whats Hot!</h2>
+ {%if hot%}
+ {%for recipe in hot%}
+ <div class="panel panel-default panel panel-primary" style="width:70%;">
+     <div class="panel-heading">
+         <h3 class="panel-title" style='display:inline-block;'><a href="{% url 'recipes:view_recipe' recipe.id %}">{{recipe.title}}</a></h3><button type="button" class="btn btn-default btn-xs col-md-offset-1">
+   <span class="glyphicon glyphicon-star" aria-hidden="true"></span>{{recipe.favorites.all |length}}
+ </button>
+         <h3 class="panel-title pull-right" style='display:inline-block;'><a href="{% url 'recipes:userrecipes' recipe.author.id %}">Created By: {{recipe.author.u_name}}</a></h3>
+     </div>
+     <div class="panel-body">
+         <h5>Description: </h5>
+         <p class='col-md-offset-1'>{{recipe.desc}}</p>
+         <h6 class='col-md-offset-10'>
+     {% if recipe.isprivate == True %}
+     This Recipe is private.
+     {%endif%}</h6> {%if user not in recipe.favorites.all%}
+         <a href="{% url 'recipes:buttons' button=1 r_id=recipe.id %}"><button type="button" class="btn btn-default btn-xs pull-left">
+   <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Add to Favs
+ </button></a> {%else%}
+         <a href="{% url 'recipes:buttons' button=2 r_id=recipe.id %}"><button type="button" class="btn btn-default btn-xs pull-left">
+   <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Remove from  Favs
+   </button></a> {%endif%} {%if request.session.user.id == recipe.author.id%}
+
+         <a href="{% url 'recipes:buttons' button=3 r_id=recipe.id %}"><button type="submit" class="btn btn-default btn-xs pull-right" aria-label="Left Align">
+   <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span> Make Private
+ </button></a>
+         <a href="{% url 'recipes:buttons' button=4 r_id=recipe.id %}"><button type="submit" class="btn btn-default btn-xs pull-right" aria-label="Left Align">
+ <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Make Public
+ </button></a> {%endif%}
+
+     </div>
+ </div>
+ {%endfor%} {%endif%}
+<h2>Browse Recipes!</h2>
+{%if recipes%}
+{%for recipe in recipes%}
+<div class="panel panel-default panel panel-primary" style="width:70%;">
+    <div class="panel-heading">
+        <h3 class="panel-title" style='display:inline-block;'><a href="{% url 'recipes:view_recipe' recipe.id %}">{{recipe.title}}</a></h3><button type="button" class="btn btn-default btn-xs col-md-offset-1">
+  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>{{recipe.favorites.all |length}}
+</button>
+        <h3 class="panel-title pull-right" style='display:inline-block;'><a href="{% url 'recipes:userrecipes' recipe.author.id %}">Created By: {{recipe.author.u_name}}</a></h3>
+    </div>
+    <div class="panel-body">
+        <h5>Description: </h5>
+        <p class='col-md-offset-1'>{{recipe.desc}}</p>
+        <h6 class='col-md-offset-10'>
+    {% if recipe.isprivate == True %}
+    This Recipe is private.
+    {%endif%}</h6> {%if user not in recipe.favorites.all%}
+        <a href="{% url 'recipes:buttons' button=1 r_id=recipe.id %}"><button type="button" class="btn btn-default btn-xs pull-left">
+  <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Add to Favs
+</button></a> {%else%}
+        <a href="{% url 'recipes:buttons' button=2 r_id=recipe.id %}"><button type="button" class="btn btn-default btn-xs pull-left">
+  <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Remove from  Favs
+  </button></a> {%endif%} {%if request.session.user.id == recipe.author.id%}
+
+        <a href="{% url 'recipes:buttons' button=3 r_id=recipe.id %}"><button type="submit" class="btn btn-default btn-xs pull-right" aria-label="Left Align">
+  <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span> Make Private
+</button></a>
+        <a href="{% url 'recipes:buttons' button=4 r_id=recipe.id %}"><button type="submit" class="btn btn-default btn-xs pull-right" aria-label="Left Align">
+<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Make Public
+</button></a> {%endif%}
+
+    </div>
+</div>
+
+{%endfor%} {%endif%}
+{% include 'recipes/pagination.html' with page=recipes %}
+ {%endblock%}
