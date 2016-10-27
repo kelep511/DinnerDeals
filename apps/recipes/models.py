@@ -36,6 +36,9 @@ class Recipes(models.Model):
     author=models.ForeignKey('login.User', related_name='recipe_author')
     ingredients=models.ManyToManyField('Ingredients', related_name='recipe_ing')
     desc=models.TextField()
+    dire=models.TextField(default='')
+    favorites=models.ManyToManyField('login.User', related_name='favs')
+    isprivate=models.BooleanField(default=False)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
 
