@@ -6,17 +6,17 @@
     <title>Dinner Deals</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
+    {% load staticfiles %}
+<link rel="stylesheet" href="{% static 'login/css/main.css' %}"media="screen" title="no title"  charset="utf-8">
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 
 <body style='padding-top: 120px;'>
 
-        <nav class="navbar navbar-default navbar-fixed-top">
+        <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
           <div class="container">
 
             <a href="{% url 'login:splash' %}">
@@ -28,7 +28,7 @@
             <div class="login_form col-md-offset-6">
                 <form class="navbar-form navbar-left" role="login" action ="{% url 'login:login' %}"method="POST">
                     {%csrf_token%}
-                    <button type="submit" class="btn btn-default">Submit</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
                     <div class="form-group">
                         <input type="text" class="form-control" name='u_name' placeholder="Username">
                         <input type="password" class="form-control" name='password' placeholder="password">
@@ -40,14 +40,19 @@
             </div>
             </div>
         </nav>
-        <div class="blocks">
+        <div class="content" id='images'>
         {%if messages%}
         {%for message in messages%}
         <li class="alert alert-{{message.tags}}" role="alert">{{message}}</li>
         {%endfor%}
         {%endif%}
-        {%block content%}<h1>Dinner Deals</h1>{%endblock%}
+        <div class="block col-md-offset-1" style='padding-top:200px;'>
+           {%block content%}<h1 style='color:black; font-size:5em;background-color:rgb(218, 203, 181);opacity:0.6;width:80%;border:1px solid rgb(188, 171, 146);border-radius:10px'>Welcome to the Kitchen Aid</h1>
+           <h4 style='margin-top:120px;color:black; margin-left:30px; background-color:rgb(218, 203, 181);opacity:0.8;width:60%;border:1px solid rgb(188, 171, 146);border-radius:10px;padding:5px;'><p> The Kitchen aid is a one stop center for all your recipe needs.</p>
+           <p>You can add recipes, views recipes from others and even find where to go when shopping for your ingredients</p>
+           <p>Sign in or Register to continue!</p></h4>{%endblock%}
         </div>
+      </div>
 
 </body>
 
