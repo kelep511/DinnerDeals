@@ -1,7 +1,8 @@
 {% extends 'recipes/base.html'%} {%block browse%}
-<li class='active'><a href="{% url 'recipes:userrecipes' u_id=request.session.user.id %}">My Recipes</a></li>
+<li class='active'><a href="{% url 'recipes:userrecipes' u_id=request.session.user.id %}">Browse</a></li>
 {%endblock%}
  {%block content%}
+ {% if page < '2' %}
  <h2>Whats Hot!</h2>
  {%if hot%}
  {%for recipe in hot%}
@@ -36,6 +37,7 @@
      </div>
  </div>
  {%endfor%} {%endif%}
+ {%endif%}
 <h2>Browse Recipes!</h2>
 {%if recipes%}
 {%for recipe in recipes%}
@@ -72,4 +74,5 @@
 
 {%endfor%} {%endif%}
 {% include 'recipes/pagination.html' with page=recipes %}
+
  {%endblock%}

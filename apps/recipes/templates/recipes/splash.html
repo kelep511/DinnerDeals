@@ -3,8 +3,92 @@
 <p> Welcome {{request.session.user.u_name}}.</p>
 {% if request.session.user.id == 1 and not request.inital %}
 <p>Please initialize the database by <a href="{% url 'recipes:first' %}"> Clicking here</a></p>
+
 {% endif %}
 
+<div id="tabs" style='width:70%;'>
+  <ul>
+    {%if recipes.0%}
+    <li><a href="#tabs-1">{{recipes.0.title}}</a></li>
+    {%else%}
+    <li><a href="#tabs-0">No Top Favorites</a></li>
+    {%endif%}
+    {%if recipes.1%}
+    <li><a href="#tabs-2">{{recipes.1.title}}</a></li>
+    {%else%}
+    <li><a href="#tabs-0">No Top Favorites</a></li>
+    {%endif%}
+    {%if recipes.2%}
+    <li><a href="#tabs-3">{{recipes.2.title}}</a></li>
+    {%else%}
+    <li><a href="#tabs-0">No Top Favorites</a></li>
+    {%endif%}
+    <li><a href="#tabs-1" style='display:none;'>Proin dolor</a></li>
+    <li><a href="#tabs-2" style='display:none;'>Proin dolor</a></li>
+    <li><a href="#tabs-3" style='display:none;'>Aenean lacinia</a></li>
+  </ul>
+  <div id="tabs-0">
+    <p>You have no Top Favorites yet. To a a recipe to your 'Top Favs' go to my account and add them.</p>
+  </div>
+  <div id="tabs-1">
+      <div class="panel-body">
+      <h5>Description: </h5>
+        <p class='col-md-offset-1'>{{recipes.0.desc}}</p>
+        <h5>Ingredients: </h5>
+        <ul class='col-md-offset-1' >
+          {% for ingredient in recipes.0.ingredients.all%}
+          <li>{{ingredient.name}}</li>
+          {%endfor%}
+        </ul>
+
+      <h5>Directions: </h5>
+        <p class='col-md-offset-1'>{{recipes.1.dire}}</p>
+      </div>
+  <div id="tabs-2">
+    <div class="panel-body">
+    <h5>Description: </h5>
+      <p class='col-md-offset-1'>{{recipes.1.desc}}</p>
+      <h5>Ingredients: </h5>
+      <ul class='col-md-offset-1' >
+        {% for ingredient in recipes.1.ingredients.all%}
+        <li>{{ingredient.name}}</li>
+        {%endfor%}
+      </ul>
+
+    <h5>Directions: </h5>
+      <p class='col-md-offset-1'>{{recipes.1.dire}}</p>
+    </div>
+  </div>
+  <div id="tabs-3">
+    <div class="panel-body">
+    <h5>Description: </h5>
+      <p class='col-md-offset-1'>{{recipes.2.desc}}</p>
+      <h5>Ingredients: </h5>
+      <ul class='col-md-offset-1' >
+        {% for ingredient in recipes.2.ingredients.all%}
+        <li>{{ingredient.name}}</li>
+        {%endfor%}
+      </ul>
+
+    <h5>Directions: </h5>
+      <p class='col-md-offset-1'>{{recipes.2.dire}}</p>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+$('ul.nav-tabs li a').click(function (e) {
+  $('ul.nav-tabs li.active').removeClass('active');
+  $(this).parent('li').addClass('active');
+});
+$( function() {
+  $( "#tabs" ).tabs();
+} );
+
+});
+
+</script>
 <!-- Container with tabs that should list the user's three chosen recipes. Or, if nothing is chosen, a prompt to visit their My Account page to set them -->
 
 {%endblock%}

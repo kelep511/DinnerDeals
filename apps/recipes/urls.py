@@ -10,7 +10,9 @@ urlpatterns = [
     url(r'^init$', views.first_time, name='first'),
     url(r'^new$', views.new, name='new'),
     url(r'^user/(?P<u_id>\d+)$', views.user, name='userrecipes'),
+    url(r'^userfavs/(?P<u_id>\d+)$', views.user_favs, name='userfavs'),
     url(r'^user/view_recipe/(?P<r_id>\d+)/$', views.view_recipe, name='view_recipe'),
     url(r'^user/button/(?P<button>\d+)/(?P<r_id>\d+)/$', views.buttons, name='buttons'),
     url(r'^browse/$', views.browse, name='browse'),
+    url(r'^top_fav/$', views.top_fav, name='top_fav'),
     ]
