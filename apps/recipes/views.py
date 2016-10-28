@@ -16,7 +16,6 @@ def first_time(request):
         return redirect(request, 'login:')
     if not request.session['user']['id'] == 1:
         return redirect(reverse('recipes:splash'))
-    init.replace()
     init.startup()
     print 'Initalization successful'
     messages.success(request, 'Successfully Initalized!')

@@ -25,9 +25,9 @@ class RecipeManager(models.Manager):
         for item in ingdata:
             print item
             item=re.sub("u'"," ",item)
-            ing=Ingredients.objects.filter(name=str(item))[0]
-            print ing
+            ing=Ingredients.objects.get(name=str(item))
             # Try changing to objects.get_or_create()
+
             recipe.ingredients.add(ing)
             recipe.save()
         if 'private' in postdata:
@@ -54,7 +54,7 @@ class Recipes(models.Model):
     desc=models.TextField(default='No discription entered.')
     dire=models.TextField(default='Throw it together and hope for the best.')
     favorites=models.ManyToManyField('login.User', related_name='favs')
-    units=models.CharField(max_length=20, default="{ 'ing': 'Nothing?', 'qty': 'Nothing', 'unit':'Nothing' }")
+    units=models.TextField(default="{ 'ing': 'Nothing?', 'qty': 'Nothing', 'unit':'Nothing' }")
     top_favorites=models.ManyToManyField('login.User', related_name='top_favs')
     isprivate=models.BooleanField(default=False)
     created_at=models.DateTimeField(auto_now_add=True)
@@ -63,8 +63,8 @@ class Recipes(models.Model):
     objects=RecipeManager()
 
 class Ingredients(models.Model):
-    name=models.CharField(max_length=40)
-    itemid=models.CharField(max_length=40)
+    name=models.CharField(max_length=100)
+    itemid=models.CharField(max_length=100)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
 
