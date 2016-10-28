@@ -31,9 +31,14 @@ def create_recipe(request):
     ingdata=[]
     unitdata=[]
     count=int(request.POST['hidden'])
+    print request.POST['item1']
     for i in range(1, count+1):
-        ingdata.append(request.POST["item"+str(i)])
-        unitdata.append({'qty': request.POST['qty'+str(i)],'unit': request.POST['unit'+str(i)]})
+        ing=request.POST['item'+str(i)]
+        nqty=request.POST['qty'+str(i)]
+        nunit=request.POST['unit'+str(i)]
+        print ing
+        ingdata.append(ing)
+        unitdata.append({'ing': ing,'qty': nqty ,'unit': nunit})
     recipe=Recipes.objects.newRecipe(request.POST, request.session['user']['id'],ingdata, unitdata)
     messages.success(request, request.POST['title']+' added successfully.')
     return redirect('recipes:add_recipe')
@@ -94,10 +99,9 @@ def view_recipe(request,r_id):
     'recipe':Recipes.objects.filter(id=r_id).annotate(tot_ing=Count('ingredients'))[0],
     'user':User.objects.filter(id=request.session['user']['id'])[0],
     }
-    print context['recipe'].ingredients.all
-
     rep=context['recipe'].units
     rep=ast.literal_eval(rep)
+    print rep
     context.update({'rep':rep,})
     return render (request, 'recipes/view_recipe.html', context)
 def browse(request):

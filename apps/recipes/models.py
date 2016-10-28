@@ -24,7 +24,9 @@ class RecipeManager(models.Manager):
         print ingdata
         for item in ingdata:
             print item
-            ing=Ingredients.objects.filter(itemid=str(item))[0]
+            item=re.sub("u'"," ",item)
+            ing=Ingredients.objects.filter(name=str(item))[0]
+            print ing
             # Try changing to objects.get_or_create()
             recipe.ingredients.add(ing)
             recipe.save()
@@ -52,7 +54,7 @@ class Recipes(models.Model):
     desc=models.TextField(default='No discription entered.')
     dire=models.TextField(default='Throw it together and hope for the best.')
     favorites=models.ManyToManyField('login.User', related_name='favs')
-    units=models.CharField(max_length=20, default="{ 'qty': 'Nothing', 'unit':'Nothing'")
+    units=models.CharField(max_length=20, default="{ 'ing': 'Nothing?', 'qty': 'Nothing', 'unit':'Nothing' }")
     top_favorites=models.ManyToManyField('login.User', related_name='top_favs')
     isprivate=models.BooleanField(default=False)
     created_at=models.DateTimeField(auto_now_add=True)
