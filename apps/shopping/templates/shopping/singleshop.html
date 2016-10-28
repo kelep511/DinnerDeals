@@ -50,7 +50,7 @@ $('#recipes').on('change', function(){
       console.log(res);
       table=res.split('|');
       console.log(table)
-      htmlstr +='<div class="recipe col-md-10" style="padding:10px;"><ul style="list-style:none;"><li><h2>'+table[0]+'</h2></li><table class="table table-striped">';
+      htmlstr +='<div class="recipe col-md-10" style="padding:10px;"><ul style="list-style:none;"><li><h2>'+table[0]+'</h2></li><table class="table table-striped" style="border:2px solid whitesmoke;">';
       for (i=1;i<table.length-1;i+=4){
         htmlstr +='<tr><div class="input-group"><td><input class="ing_list" type="checkbox" name="ingredients" value="'+table[i+1]+'"></td><td>'+table[i]+'</td><td>Located in '+table[i+2]+'</td><td>Category : '+table[i+3]+'</td></div></tr>';
       };
