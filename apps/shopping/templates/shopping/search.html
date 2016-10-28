@@ -1,5 +1,6 @@
 {% extends 'shopping/base.html' %}
 
+{%block shop%}<li class='active'><a href="{% url 'shop:search'%}" >Go Shopping</a></li>{%endblock%}
 {% block zip %}
 <form class="navbar-form navbar-right" action='./zipsearch' method='post' id='zipfind' role="search">
     {%csrf_token%}

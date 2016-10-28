@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  {% load staticfiles %}
+
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <title>{%block title%}{%endblock%}</title>
 </head>
@@ -16,9 +16,11 @@
   {%block shop%}<li><a href="{% url 'shop:search'%}" >Go Shopping</a></li>{%endblock%}
   {%block recipe%}<li><a href="{% url 'recipes:add_recipe'%}">Add a Recipe</a></li>{%endblock%}
   {%block myrecipe%}<li><a href="{% url 'recipes:userrecipes' u_id=request.session.user.id %}">My Recipes</a> {% endblock %}
+  {%block browse%}<li><a href="{% url 'recipes:browse' %}">Browse</a> {% endblock %}
   {%block account%}<li><a href="{% url 'recipes:myaccount' %}" >My Account</a></li>{%endblock%}
 
-<li><a class='.navbar-right'href="{% url 'login:logout'%}" >Logout</a></li>
+  <li><a class='.navbar-right'href="{% url 'login:logout'%}" >Logout</a></li>
+
 
 </ul>
 {% block zip%}

@@ -1,5 +1,5 @@
 {% extends 'shopping/base.html' %}
-
+{%block shop%}<li class='active'><a href="{% url 'shop:search'%}" >Go Shopping</a></li>{%endblock%}
 {%block content%}
 <div class="row">
   <form action="./displayrecipe" name='display' method='post' id='recipes'>
@@ -11,13 +11,22 @@
     <option value="{{items.id}}">{{items.title}}</option>
     {% endfor %}
   </select></li>
-  <li style=' display:inline;'><a class='.col-md3' id='multi' href="{% url 'shop:multi' %}">Shopping for more than one recipe? Click here!</a></li>
+  <li style=' display:inline;'><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal">Shopping for more than one recipe? Click here!</button></li>
 </ul>
 </form>
 </div>
 <div class="row">
   <div id="results">
+    {% load staticfiles %}
+    </div>
+  <div id="loading-image" style='display:none;'><img style='height:200px; width:200px; position:relative; top:5em; left:5em;' src="{% static 'shopping/img/loading.gif' %}" alt="load"></div>
 
+</div>
+<div id='modal' class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <p>Sorry! We don't quite have this implimented yet. Please check back with us in the future!</p>
+    </div>
   </div>
 </div>
 {%endblock content%}
@@ -25,6 +34,9 @@
 {%block script%}
 $('#recipes').on('change', function(){
   console.log('clicked recipe');
+  $('#results').hide()
+  $('#loading-image').show();
+
   $.ajax({
     url: $(this).attr('action'),
     method: 'POST',
@@ -32,29 +44,31 @@ $('#recipes').on('change', function(){
     success: function(res){
       var htmlstr='';
       console.log('results:');
-      console.log(res.ingred);
-      htmlstr +='<div class="recipe col-md-6"><ul style="liststyle:none;"><li>'+res.title+'</li><li><div class="input-group"><span class="input-group-addon">';
-      for (items in res){
-        htmlstr +='<input type="checkbox" name="ingredients" value="'+items.itemid+'"></span>'+items.name+'</div></li>';
+      console.log(res);
+      table=res.split('|');
+      console.log(table)
+      htmlstr +='<div class="recipe col-md-10" style="padding:10px;"><ul style="list-style:none;"><li><h2>'+table[0]+'</h2></li>';
+      for (i=1;i<table.length-1;i+=4){
+        htmlstr +='<li><div class="input-group"><span class="input-group-addon"><input class="ing_list" type="checkbox" name="ingredients" value="'+table[i+1]+'">'+table[i]+' | Located in '+table[i+2]+' | Category : '+table[i+3]+'</span></div></li>';
       };
       htmlstr +='</ul></div>';
       $('#results').html(htmlstr);
-    }
+    },
+      complete: function(){
+      $('#loading-image').hide();
+      $('#results').show()
+    },
   });
     return false;
   });
 
-$('#mutli').on('click', function(){
-  alert("<div class="fade in">Unfortuntely, this has yet to be implimented just yet. Check back, maybe!</div>")
-});
-
 function completeAlert(){
-  alert("<div class='fade in'>Youve picked everything up! Choose a new recipe if you'd like to continue.</div>");
+  alert("Youve picked everything up! Choose a new recipe if you'd like to continue.");
   return True;
-}
+};
 
-$('#results input[type="checkbox"]').click(function(event){
-  if ($(this).not(':checked').length == 0 ){
+$('.ing_list:checked').change(function(){
+  if ($('.ing_list:checked').length == $('.ing_list').length){
     completeAlert();
     $('#results').html('');
     $('#recipes').val = '';

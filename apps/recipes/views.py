@@ -6,6 +6,8 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.db.models import Count
+import json
+import ast
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
@@ -14,6 +16,7 @@ def first_time(request):
         return redirect(request, 'login:')
     if not request.session['user']['id'] == 1:
         return redirect(reverse('recipes:splash'))
+    init.replace()
     init.startup()
     print 'Initalization successful'
     messages.success(request, 'Successfully Initalized!')
@@ -26,13 +29,12 @@ def create_recipe(request):
     if not request.method == 'POST':
         return redirect(reverse('recipse:splash'))
     ingdata=[]
+    unitdata=[]
     count=int(request.POST['hidden'])
     for i in range(1, count+1):
         ingdata.append(request.POST["item"+str(i)])
-    recipe=Recipes.objects.newRecipe(request.POST, request.session['user']['id'],ingdata)
-    for item in request.POST['item']:
-        ingdata.append(item)
-    recipe=Recipes.objects.newRecipe(request.POST['title'], request.session['user']['id'], request.POST['desc'],ingdata)
+        unitdata.append({'qty': request.POST['qty'+str(i)],'unit': request.POST['unit'+str(i)]})
+    recipe=Recipes.objects.newRecipe(request.POST, request.session['user']['id'],ingdata, unitdata)
     messages.success(request, request.POST['title']+' added successfully.')
     return redirect('recipes:add_recipe')
 
@@ -57,9 +59,14 @@ def user(request, u_id):
     return render(request, 'recipes/user.html', context)
 def view_recipe(request,r_id):
     context={
-    'recipe':Recipes.objects.filter(id=r_id)[0],
+    'recipe':Recipes.objects.filter(id=r_id).annotate(tot_ing=Count('ingredients'))[0],
     'user':User.objects.filter(id=request.session['user']['id'])[0],
     }
+    print context['recipe'].ingredients.all
+
+    rep=context['recipe'].units
+    rep=ast.literal_eval(rep)
+    context.update({'rep':rep,})
     return render (request, 'recipes/view_recipe.html', context)
 # def browse(request):
 #     context={

@@ -12,14 +12,19 @@ class IngredientManager(models.Manager):
 
 # In order to add ingredients to recipe, must pass an array of product ids
 class RecipeManager(models.Manager):
-    def newRecipe(self,postdata, u_id, ingdata):
-        recipe=Recipes.objects.create(title=str(postdata["title"]),author=User.objects.get(id=u_id), dire=postdata['dire'] ,desc=postdata['desc'])
-        # ingdata=ingdata.join([str(x) for x in ingdata])
-        # ingdata=ingdata.split(',')
+    def newRecipe(self,postdata, u_id, ingdata, unitdata):
+        if postdata['dire'] == '' and postdata['desc'] == '':
+            recipe=Recipes.objects.create(title=str(postdata["title"]),units=unitdata, author=User.objects.get(id=u_id))
+        elif postdata['dire'] == '':
+            recipe=Recipes.objects.create(title=str(postdata["title"]),units=unitdata, author=User.objects.get(id=u_id),desc=postdata['desc'])
+        elif postdata['desc'] == '':
+            recipe=Recipes.objects.create(title=str(postdata["title"]),units=unitdata, author=User.objects.get(id=u_id), dire=postdata['dire'])
+        else:
+            recipe=Recipes.objects.create(title=str(postdata["title"]),units=unitdata, author=User.objects.get(id=u_id), dire=postdata['dire'] ,desc=postdata['desc'])
         print ingdata
         for item in ingdata:
             print item
-            ing=Ingredients.objects.filter(itemid=int(item))[0]
+            ing=Ingredients.objects.filter(itemid=str(item))[0]
             # Try changing to objects.get_or_create()
             recipe.ingredients.add(ing)
             recipe.save()
@@ -47,6 +52,7 @@ class Recipes(models.Model):
     desc=models.TextField(default='No discription entered.')
     dire=models.TextField(default='Throw it together and hope for the best.')
     favorites=models.ManyToManyField('login.User', related_name='favs')
+    units=models.CharField(max_length=20, default="{ 'qty': 'Nothing', 'unit':'Nothing'")
     isprivate=models.BooleanField(default=False)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
@@ -55,7 +61,7 @@ class Recipes(models.Model):
 
 class Ingredients(models.Model):
     name=models.CharField(max_length=40)
-    itemid=models.CharField(max_length=15)
+    itemid=models.CharField(max_length=40)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
 

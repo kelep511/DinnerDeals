@@ -1,4 +1,12 @@
 from .models import IngredientManager, Ingredients
+import requests
+import json
+from xml.dom.minidom import parse, parseString
+from xmljson import badgerfish as bf
+from xml.etree.ElementTree import fromstring
+from json import dumps
+import re
+import xml.etree.cElementTree as et
 
 data=[]
 data.append(['Organic Baby Carrots',75640])
@@ -34,7 +42,7 @@ data.append(['Cream Cheese',34058])
 data.append(['Grade AA Large Eggs',34337])
 data.append(['Cheese Fish Goldfish',73386])
 data.append(['Butter Half Sticks',33981])
-data.append(['1% Lowfat Milk - .5 Gal Carton',83432])
+data.append(['Organic 2% Reduced Fat Milk',34413])
 data.append(['All Purpose Flour Enriched Bleached Presifted',70211])
 data.append(['Fine Granulated Sugar',31215])
 data.append(['Crushed Red Pepper',32342])
@@ -59,4 +67,15 @@ data.append(['Water',0])
 def startup():
     for item in data:
         Ingredients.objects.addIngredient(item[0],item[1])
+    return True
+
+def replace():
+    for item in data:
+        url='http://www.SupermarketAPI.com/api.asmx/SearchByItemID?APIKEY=6af0d05f87&ItemId='+str(item[1])
+        stores=requests.get(url).content
+        stores=re.sub(' xmlns="[^"]+"', '', stores, count=1)
+        stores=dumps(bf.data(fromstring(stores)))
+        sdata=json.loads(stores)
+        pname=sdata['ArrayOfProduct']['Product']['Itemname']['$']
+        item[1]=pname
     return True

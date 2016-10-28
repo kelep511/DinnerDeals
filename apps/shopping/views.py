@@ -6,8 +6,10 @@ from xml.etree.ElementTree import fromstring
 from ..login.models import User
 from ..recipes.models import Recipes, Ingredients
 from json import dumps
+import json
 import requests
 import re
+import xml.etree.cElementTree as et
 # Create your views here.
 
 def idCheck(request):
@@ -30,11 +32,29 @@ def multi(request):
 def displaysingle(request):
     r_id=request.POST['recipes']
     print r_id
-    ingred=Ingredients.objects.filter(recipe_ing=Recipes.objects.get(id=r_id))
-    context={
-        'r_id':r_id,
-        'ingred':ingred,
-    }
+    recipe=Recipes.objects.filter(id=r_id)[0]
+    context=[]
+    title=recipe.title+'|'
+    context.append(title)
+    print context
+    fullingredients=Ingredients.objects.filter(recipe_ing=recipe)
+    for items in fullingredients:
+        context.append(items.name+' | ')
+        context.append(items.itemid+' | ')
+        if items.itemid == 'NOITEM':
+            context.append(' A water tap | ')
+            context.append(' You have water at home, right? | ')
+        else:
+            url='http://www.SupermarketAPI.com/api.asmx/SearchForItem?APIKEY=6af0d05f87&StoreId='+request.session['storeid']+'&ItemName='+items.itemid
+            product=requests.get(url).content
+            product=re.sub(' xmlns="[^"]+"', '', product, count=1)
+            product=dumps(bf.data(fromstring(product)))
+            pdata=json.loads(product)
+            print pdata
+            print pdata['ArrayOfProduct']['Product']['AisleNumber']['$']
+            print pdata['ArrayOfProduct']['Product']['ItemCategory']['$']
+            context.append(pdata['ArrayOfProduct']['Product']['AisleNumber']['$'] + ' |')
+            context.append(pdata['ArrayOfProduct']['Product']['ItemCategory']['$'] + ' |')
     return HttpResponse(context)
 
 def zipsearch(request):
@@ -45,6 +65,7 @@ def zipsearch(request):
     stores=requests.get(url).content
     stores=re.sub(' xmlns="[^"]+"', '', stores, count=1)
     stores=dumps(bf.data(fromstring(stores)))
+
     return HttpResponse(stores)
 
 def store(request):
