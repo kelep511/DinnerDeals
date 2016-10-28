@@ -5,7 +5,7 @@
 {%block content%}
 My account page
 Edit your information here!
-<form class="form-horizontal" style='padding-top: 30px;' method="POST" action="{% url 'login:edit_user' %}">
+<form class="form-horizontal " style='padding-top: 30px;' method="POST" action="{% url 'login:edit_user' %}" >
   {% csrf_token %}
   <div class="form-group">
     <label class="col-sm-2 control-label">First Name</label>
@@ -49,5 +49,59 @@ Edit your information here!
     </div>
   </div>
 </form>
+
+<form class="form-horizontal " style='padding-top: 30px;' method="POST" action="{% url 'recipes:top_fav' %}" >
+  {% csrf_token %}
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Top Recipe 1</label>
+    <div class="col-sm-2">
+      <select class="form-control" name="item1">
+        {%if top_fav.0%}
+        <option value="{{top_fav.0.id}}" >{{top_fav.0.title}}</option>
+        {%else%}
+      <option value="" disable selected disabled="disable" >--select one--</option>
+      {%endif%}
+      {%for recipe in recipes%}
+      <option value='{{recipe.id}}'>{{recipe.title}}</option>
+      {%endfor%}
+    </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Top Recipe 2</label>
+    <div class="col-sm-2">
+      <select class="form-control" name="item2">
+        {%if top_fav.1%}
+        <option value="{{top_fav.1.id}}" >{{top_fav.1.title}}</option>
+        {%else%}
+      <option value="" disable selected disabled="disable" >--select one--</option>
+      {%endif%}
+      {%for recipe in recipes%}
+      <option value='{{recipe.id}}'>{{recipe.title}}</option>
+      {%endfor%}
+    </select>
+    </div>
+  </div><div class="form-group">
+    <label class="col-sm-2 control-label">Top Recipe 3</label>
+    <div class="col-sm-2">
+      <select class="form-control" name="item3">
+        {%if top_fav.2%}
+        <option value="{{top_fav.2.id}}" >{{top_fav.2.title}}</option>
+        {%else%}
+      <option value="" disable selected disabled="disable" >--select one--</option>
+      {%endif%}
+      {%for recipe in recipes%}
+      <option value='{{recipe.id}}'>{{recipe.title}}</option>
+      {%endfor%}
+    </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Save top recipes</button>
+    </div>
+  </div>
+</form>
+
 
 {%endblock%}

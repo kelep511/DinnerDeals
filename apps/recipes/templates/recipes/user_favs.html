@@ -7,8 +7,8 @@
 {%block content%}
 <h2 style=>{{user.u_name}}'s Recipes!</h2>
 <ul class='nav nav-tabs' style='width:70%;'>
-  <li role='presentation' class='active'> <a href="{% url 'recipes:userrecipes' user.id %}">User's Recipes</a></li>
-  <li role='presentation'> <a href="{% url 'recipes:userfavs' user.id %}">User's Favorites</a></li>
+  <li role='presentation' > <a href="{% url 'recipes:userrecipes' user.id %}">User's Recipes</a></li>
+  <li role='presentation' class='active'> <a href="{% url 'recipes:userfavs' user.id %}">User's Favorites</a></li>
 </ul>
 
 {%if recipes%}
@@ -64,8 +64,6 @@
 {%endif%}
 
 {% include 'recipes/pagination.html' with page=recipes %}
-
-
 
 
 {%endblock%}

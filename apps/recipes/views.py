@@ -30,19 +30,38 @@ def create_recipe(request):
     for i in range(1, count+1):
         ingdata.append(request.POST["item"+str(i)])
     recipe=Recipes.objects.newRecipe(request.POST, request.session['user']['id'],ingdata)
-    for item in request.POST['item']:
-        ingdata.append(item)
-    recipe=Recipes.objects.newRecipe(request.POST['title'], request.session['user']['id'], request.POST['desc'],ingdata)
     messages.success(request, request.POST['title']+' added successfully.')
     return redirect('recipes:add_recipe')
 
 def splash(request):
-    return render (request, 'recipes/splash.html')
+
+
+    context={
+    'recipes':Recipes.objects.filter(top_favorites=User.objects.filter(id=request.session['user']['id'])[0])
+
+    }
+    return render (request, 'recipes/splash.html', context)
 def myaccount(request):
     context={
-    'user':User.objects.get(id=request.session['user']['id'])
+    'user':User.objects.get(id=request.session['user']['id']),
+    'recipes':Recipes.objects.filter(author=request.session['user']['id']).exclude(top_favorites=User.objects.get(id=request.session['user']['id'])) | Recipes.objects.filter(favorites=request.session['user']['id']).exclude(top_favorites=User.objects.get(id=request.session['user']['id'])).order_by('title'),
+    'top_fav':Recipes.objects.filter(top_favorites=User.objects.filter(id=request.session['user']['id'])[0])
     }
     return render (request, 'recipes/myaccount.html', context)
+def top_fav(request,):
+    user=User.objects.get(id=request.session['user']['id'])
+    if user.top_favs:
+
+        print user.top_favs
+        user.top_favs.clear()
+    if 'item1' in request.POST:
+        user.top_favs.add(Recipes.objects.get(id=request.POST['item1']))
+    if 'item2' in request.POST:
+        user.top_favs.add(Recipes.objects.get(id=request.POST['item2']))
+    if  'item3' in request.POST:
+        user.top_favs.add(Recipes.objects.get(id=request.POST['item3']))
+    messages.success(request,'Successfully changed Top favorites')
+    return redirect ('recipes:myaccount')
 def add_recipe(request):
     context={
     'ingredients':Ingredients.objects.distinct().order_by('name'),
@@ -50,24 +69,36 @@ def add_recipe(request):
     return render (request, 'recipes/add_recipe.html', context)
 
 def user(request, u_id):
+    recipe=Recipes.objects.filter(author=User.objects.filter(id=u_id)[0]).order_by('-created_at')
     context={
     'user':User.objects.filter(id=u_id)[0],
-    'recipes':Recipes.objects.filter(author=User.objects.filter(id=u_id)[0]).order_by('-created_at')
+
     }
+    pagination(request, recipe, context)
     return render(request, 'recipes/user.html', context)
+def user_favs(request, u_id):
+    recipe=Recipes.objects.filter(favorites=User.objects.filter(id=u_id)[0]).order_by('-created_at')
+    context={
+    'user':User.objects.filter(id=u_id)[0],
+
+    }
+    pagination(request, recipe, context)
+    return render(request, 'recipes/user_favs.html', context)
 def view_recipe(request,r_id):
     context={
     'recipe':Recipes.objects.filter(id=r_id)[0],
     'user':User.objects.filter(id=request.session['user']['id'])[0],
     }
     return render (request, 'recipes/view_recipe.html', context)
-# def browse(request):
-#     context={
-#     'user':User.objects.filter(id=request.session['user']['id'])[0],
-#     'recipes':Recipes.objects.exclude(isprivate=True).order_by('-created_at'),
-#     'hot':Recipes.objects.exclude(isprivate=True).annotate(num_favs=Count('favorites')).order_by('-num_favs')[:5]
-#     }
-#     return render(request, "recipes/browse.html", context)
+def browse(request):
+    context={
+    'user':User.objects.filter(id=request.session['user']['id'])[0],
+    'hot':Recipes.objects.exclude(isprivate=True).annotate(num_favs=Count('favorites')).order_by('-num_favs')[:3]
+    }
+    recipe=Recipes.objects.exclude(isprivate=True).order_by('-created_at')
+    pagination(request, recipe, context)
+    print context
+    return render(request, "recipes/browse.html", context)
 def buttons(request, button, r_id):
     recipe= Recipes.objects.filter(id=r_id)[0]
     if button=='1':
@@ -85,14 +116,7 @@ def buttons(request, button, r_id):
         recipe.save()
         messages.success(request,'Successfully made recipe public.')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
-def browse(request):
-    context={
-    'user':User.objects.filter(id=request.session['user']['id'])[0],
-    'hot':Recipes.objects.exclude(isprivate=True).annotate(num_favs=Count('favorites')).order_by('-num_favs')[:3]
-    }
-    recipe=Recipes.objects.exclude(isprivate=True).order_by('-created_at')
-
-
+def pagination(request, recipe, context):
     paginator = Paginator(recipe, 2)
     page = request.GET.get('page')
     try:
@@ -104,4 +128,4 @@ def browse(request):
 
     context.update({'recipes':recipes,'page':page})
 
-    return render(request, 'recipes/browse.html',context)
+    return(request, context)

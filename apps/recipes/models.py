@@ -47,6 +47,7 @@ class Recipes(models.Model):
     desc=models.TextField(default='No discription entered.')
     dire=models.TextField(default='Throw it together and hope for the best.')
     favorites=models.ManyToManyField('login.User', related_name='favs')
+    top_favorites=models.ManyToManyField('login.User', related_name='top_favs')
     isprivate=models.BooleanField(default=False)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
