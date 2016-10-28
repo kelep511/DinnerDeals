@@ -36,7 +36,6 @@ def displaysingle(request):
     context=[]
     title=recipe.title+'|'
     context.append(title)
-    print context
     fullingredients=Ingredients.objects.filter(recipe_ing=recipe)
     for items in fullingredients:
         context.append(items.name+' | ')
