@@ -67,11 +67,19 @@ function completeAlert(){
   return True;
 };
 
-$('.ing_list:checked').change(function(){
-  if ($('.ing_list:checked').length == $('.ing_list').length){
+$('.ing_list').change(function(){
+  var checkboxes = document.getElementsByName(ingredients);
+  var checkboxesChecked =[];
+  for (var i=0; i<checkboxes.length; i++){
+    if (checkboxes[i].checked){
+      checkboxesChecked.push(checkboxes[i]);
+    }
+  }
+  if (checkboxesChecked.length == checkboxes.length){
     completeAlert();
     $('#results').html('');
     $('#recipes').val = '';
   }
 });
+
 {%endblock script%}
