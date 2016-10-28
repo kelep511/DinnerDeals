@@ -25,10 +25,13 @@
 <div id='modal' class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       <p>Sorry! We don't quite have this implimented yet. Please check back with us in the future!</p>
     </div>
   </div>
 </div>
+
+
 {%endblock content%}
 
 {%block script%}
@@ -67,19 +70,22 @@ function completeAlert(){
   return True;
 };
 
-$('.ing_list').change(function(){
-  var checkboxes = document.getElementsByName(ingredients);
-  var checkboxesChecked =[];
-  for (var i=0; i<checkboxes.length; i++){
-    if (checkboxes[i].checked){
-      checkboxesChecked.push(checkboxes[i]);
+var count =0;
+$(document).on('click', ".ing_list", function(){
+  var items= $('.ing_list').length
+  if($(".ing_list").is(":checked")){
+    count++
+    console.log(count)
+    if (count==items){
+      alert("Youve picked everything up! Choose a new recipe if you'd like to continue.");
+      count=0
+
     }
+
+
   }
-  if (checkboxesChecked.length == checkboxes.length){
-    completeAlert();
-    $('#results').html('');
-    $('#recipes').val = '';
-  }
+
 });
+
 
 {%endblock script%}
