@@ -1,24 +1,26 @@
 
     {% extends 'login/base.html'%}
   {%block content%}
+  <div style='background-color:rgb(218, 203, 181);opacity:0.9;width:40%;border:1px solid rgb(188, 171, 146);border-radius:10px'>
   <form class="form-horizontal" action ="{% url 'login:login' %}" style='padding-top: 30px;' method="POST" >
     {% csrf_token %}
     <div class="form-group">
-      <label class="col-sm-2 control-label">First Name</label>
-      <div class="col-sm-2">
+      <label class="col-sm-4 control-label">First Name</label>
+      <div class="col-sm-4">
         <input type="text" class="form-control" name='u_name' placeholder="Username">
       </div>
     </div>
     <div class="form-group">
-      <label  class="col-sm-2 control-label">Password</label>
-      <div class="col-sm-2">
+      <label  class="col-sm-4 control-label">Password</label>
+      <div class="col-sm-4">
         <input type="password" class="form-control" name='password' placeholder="Password">
       </div>
     </div>
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
-        <button type="submit" class="btn btn-default">Login</button>
+        <button type="submit" class="btn btn-primary">Login</button>
       </div>
     </div>
   </form>
+  </div>
   {%endblock%}

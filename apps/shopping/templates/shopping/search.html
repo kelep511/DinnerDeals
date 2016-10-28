@@ -46,7 +46,7 @@ $('#zipfind').submit(function() {
       htmlstr += '<li><input type="radio" value="'+ res[i].StoreId.$ + '" name="storeid"> Select this store</li>';
       htmlstr += '</ul></div>';
     }
-    htmlstr2 = '<input type="submit" value="Use this">';
+    htmlstr2 = '<input type="submit" class="btn btn-primary" value="Use this">';
     console.log(htmlstr);
     $('#results').html(htmlstr);
     $('#results').after(htmlstr2);
