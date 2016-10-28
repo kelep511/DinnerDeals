@@ -50,8 +50,7 @@ def displaysingle(request):
             product=dumps(bf.data(fromstring(product)))
             pdata=json.loads(product)
             print pdata
-            print pdata['ArrayOfProduct']['Product']['AisleNumber']['$']
-            print pdata['ArrayOfProduct']['Product']['ItemCategory']['$']
+            print url
             context.append(pdata['ArrayOfProduct']['Product']['AisleNumber']['$'] + ' |')
             context.append(pdata['ArrayOfProduct']['Product']['ItemCategory']['$'] + ' |')
     return HttpResponse(context)
@@ -75,6 +74,6 @@ def store(request):
         request.session['storeid']=request.POST['storeid']
     context={
     'storeid':request.session['storeid'],
-    'recipes':Recipes.objects.filter(author=User.objects.get(id=request.session['user']['id'])),
+    'recipes':Recipes.objects.filter(author=User.objects.get(id=request.session['user']['id'])) | Recipes.objects.filter(favorites=User.objects.get(id=request.session['user']['id'])),
     }
     return render(request, 'shopping/singleshop.html', context)
