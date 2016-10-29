@@ -17,12 +17,20 @@
 <form action="{% url 'shop:found' %}" method='post'>
 {%csrf_token%}
 <div id="results">
-<div class="jumbotron">
+<div class="jumbotron" style='border-radius:10px; padding:2em;'>
   <h1>Lets find a store!</h1>
   <p>Please use the search function above to find the store nearest you.</p>
 </div>
 </div>
 </form>
+<div id='modal' class="modal fade bs-example-modal-sm" style='top:50%;' tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <p>Sorry! Looks like there are no stores in the database for your zipcode. Please try another.</p>
+    </div>
+  </div>
+</div>
 {%endblock content%}
 
 {%block script%}
@@ -31,6 +39,13 @@ $('#zipfind').submit(function() {
   $.post($(this).attr('action'), $(this).serialize(), function(res){
     console.log('the response object:');
     console.log(res);
+    try{
+      console.log(res.ArrayOfStore.Store[0])
+    }
+    catch(err){
+      $('#modal').modal('toggle');
+      return false;
+    }
     var htmlstr='';
     var htmlstr2='';
     console.log('Array?');

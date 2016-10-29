@@ -30,6 +30,7 @@ def multi(request):
     pass
 
 def displaysingle(request):
+
     r_id=request.POST['recipes']
     print r_id
     recipe=Recipes.objects.filter(id=r_id)[0]
@@ -51,8 +52,12 @@ def displaysingle(request):
             pdata=json.loads(product)
             print pdata
             print url
-            context.append(pdata['ArrayOfProduct']['Product']['AisleNumber']['$'] + ' |')
-            context.append(pdata['ArrayOfProduct']['Product']['ItemCategory']['$'] + ' |')
+            try:
+                context.append(pdata['ArrayOfProduct']['Product']['AisleNumber']['$'] + ' |')
+                context.append(pdata['ArrayOfProduct']['Product']['ItemCategory']['$'] + ' |')
+            except:
+                context='Looks like there was an error with the items returned. Please try another recipe.'
+                return HttpResponse(context)
     return HttpResponse(context)
 
 def zipsearch(request):

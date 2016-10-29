@@ -45,6 +45,10 @@ $('#recipes').on('change', function(){
     method: 'POST',
     data: $(this).serialize(),
     success: function(res){
+      if (res=='error'){
+        $('#modal').modal('toggle');
+        return false;
+      }
       var htmlstr='';
       console.log('results:');
       console.log(res);
