@@ -35,7 +35,7 @@ Here you can create recipes(Ingredients are limited.)
 * Edit your personal information here.
 * Edit your top recipes that display on your home page.
 
-### Extra note
+### Extra notes
 
 * Clicking on the Title of a recipe will show the full recipe.
 * Clicking on a user will allow you to see all public recipes that user created as well as all public recipes that user has favorited.
