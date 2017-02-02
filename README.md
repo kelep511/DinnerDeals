@@ -5,7 +5,7 @@ Dinner Deals was built in mind with being able to take the ingredients in a reci
 
 ## How to use
 
-1. Go to <a href="35.162.101.46">35.162.101.46</a>
+1. Go to <a href="/35.162.101.46">35.162.101.46</a>
 2. If its your first time, click on the new user link under the submit button on the top nav bar.
 2a. If you've registered previously, you can log in with the top nav-bar
 3. Enjoy!
